@@ -2,23 +2,25 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <codecvt>
+#include <locale>
 class modAlphaCipher
 {
 private:
-	std::string numAlpha =
-		"ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //алфавит по порядку
-	std::map <char,int> alphaNum; //ассоциативный массив "номер по символу"
-	std::vector <int> key; //ключ
-	std::vector<int> convert(const std::string& s); //преобразование строка-вектор
-	std::string convert(const std::vector<int>& v); //преобразование вектор-строка
-	std::string getValidKey(const std::string & s);
-	std::string getValidOpenText(const std::string & s);
-	std::string getValidCipherText(const std::string & s);
+	std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> codec;
+	std::wstring numAlpha = L"АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ";
+	std::map <wchar_t,int> alphaNum;
+	std::vector <int> key;
+	std::vector<int> convert(const std::wstring& ws);
+	std::wstring convert(const std::vector<int>& v);
+	std::wstring getValidKey(const std::wstring & ws);
+	std::wstring getValidOpenText(const std::wstring & ws);
+	std::wstring getValidCipherText(const std::wstring & ws);
 public:
 	modAlphaCipher()=delete; //запретим конструктор без параметров
-	modAlphaCipher(const std::string& skey); //конструктор для установки ключа
-	std::string encrypt(const std::string& open_text); //зашифрование
-	std::string decrypt(const std::string& cipher_text);//расшифрование
+	modAlphaCipher(const std::wstring& wskey); //конструктор для установки ключа
+	std::wstring encrypt(const std::wstring& open_text);
+	std::wstring decrypt(const std::wstring& cipher_text);
 };
 
 class cipher_error: public std::invalid_argument {

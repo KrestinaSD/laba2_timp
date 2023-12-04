@@ -1,35 +1,38 @@
 #include <iostream>
+#include <locale>
+#include <cctype>
+#include <codecvt>
+#include <typeinfo>
 #include "modAlphaCipher.cpp"
 using namespace std;
 
-void check(const string& Text, const string& key, const bool destructCipherText=false)
+void check(const wstring& Text, const wstring& key, const bool destructCipherText=false)
 { 
 try {
-	string cipherText;
-	string decryptedText;
-	modAlphaCipher cipher(key);
-	cipherText = cipher.encrypt(Text); // зашифровывание
-		if (destructCipherText) // надо "портить"?
-			cipherText.front() = tolower(cipherText.front()); // "портим"
-		decryptedText = cipher.decrypt(cipherText); // расшифровывание
-	decryptedText = cipher.decrypt(cipherText);
-	cout<<"key="<<key<<endl;
-	cout<<Text<<endl;
-	cout<<cipherText<<endl;
-	
-	cout<<decryptedText<<endl;
-	} catch (const cipher_error & e) {
-		cerr<<"Error: "<<e.what()<<endl;
-	}
+	 wstring cipherText;
+     wstring decryptedText;
+     modAlphaCipher cipher(key);
+     cipherText = cipher.encrypt(Text);
+     if (destructCipherText)
+        cipherText.front() = towlower(cipherText.front());
+     decryptedText = cipher.decrypt(cipherText);
+     wcout<<L"key="<<key<<endl;
+     wcout<<Text<<endl;
+     wcout<<cipherText<<endl;
+     wcout<<decryptedText<<endl;
+ } catch (const cipher_error & e) {
+        wcerr<<"Error: "<<e.what()<<endl;
+  }
 }
 	
 int main(int argc, char **argv)
-{ 
-	check("THEQUICKBROWNFOXJUMPSOVERTHELAZYDOG","Simple");
-	check("THEQUICKBROWNFOXJUMPSOVERTHELAZYDOG","");
-	check("THEQUICKBROWNFOXJUMPSOVERTHELAZYDOG","ABCD123");
-	check("The Quick Brown Fox Jumps Over The Lazy Dog","SUPER");
-	check("123","ABCD");
-	check("THEQUICKBROWNFOXJUMPSOVERTHELAZYDOG","TOPSECRET",true);
+{ 	locale loc("ru_RU.UTF-8");
+    locale::global(loc);
+	check(L"РОССИЯНЕ",L"НЕАМЕРИКАНЦЫ");
+	check(L"РОССИЯНЕ",L"");
+	check(L"АМЕРИКАНЦЫ",L"НЕРОССИЯНЕ321");
+	check(L"А М Е Р И К А",L"РОССИЯ");
+	check(L"123",L"РОССИЯ");
+	check(L"УТИПУТИ",L"СЕКРЕТ",true);
 return 0;
 }
