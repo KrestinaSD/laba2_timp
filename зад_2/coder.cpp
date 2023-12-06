@@ -85,6 +85,7 @@ inline std::wstring coder::getValidCipherText(const std::wstring & ws_cipher_tex
 
 	for (auto c:ws_cipher_text) {
 		if (!iswupper(c)) {
+		
 				throw cipher_error(std::string("Invalid text"));
 		}
 	}
